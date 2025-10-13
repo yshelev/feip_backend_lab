@@ -17,7 +17,7 @@ services:
       depends_on:
         - php
 
-  db:
+  database:
     build:
       context: ./docker/postgresql
     container_name: db-container
