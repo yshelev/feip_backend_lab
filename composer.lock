@@ -2390,6 +2390,7 @@
             "time": "2021-02-03T23:26:27+00:00"
         },
         {
+
             "name": "psr/clock",
             "version": "1.0.0",
             "source": {
@@ -2647,6 +2648,7 @@
             "time": "2024-09-11T13:17:53+00:00"
         },
         {
+
             "name": "sebastian/cli-parser",
             "version": "4.2.0",
             "source": {
@@ -4250,6 +4252,7 @@
             "time": "2025-09-22T15:31:00+00:00"
         },
         {
+
             "name": "symfony/css-selector",
             "version": "v7.3.0",
             "source": {
@@ -4541,6 +4544,7 @@
             "time": "2024-09-25T14:21:43+00:00"
         },
         {
+
             "name": "symfony/doctrine-bridge",
             "version": "v7.3.4",
             "source": {
@@ -5120,6 +5124,7 @@
             "time": "2024-09-25T14:21:43+00:00"
         },
         {
+
             "name": "symfony/expression-language",
             "version": "v7.3.2",
             "source": {
@@ -5398,6 +5403,7 @@
             "time": "2025-08-22T07:17:23+00:00"
         },
         {
+
             "name": "symfony/form",
             "version": "v7.3.4",
             "source": {
@@ -5657,6 +5663,7 @@
             "time": "2025-09-17T05:51:54+00:00"
         },
         {
+
             "name": "symfony/http-client",
             "version": "v7.3.4",
             "source": {
@@ -6036,6 +6043,7 @@
             "time": "2025-09-27T12:32:17+00:00"
         },
         {
+
             "name": "symfony/intl",
             "version": "v7.3.4",
             "source": {
@@ -6954,6 +6962,7 @@
             "time": "2025-06-27T09:58:17+00:00"
         },
         {
+
             "name": "symfony/polyfill-intl-icu",
             "version": "v1.33.0",
             "source": {
@@ -7379,6 +7388,7 @@
             "time": "2025-07-08T02:45:35+00:00"
         },
         {
+
             "name": "symfony/polyfill-php84",
             "version": "v1.33.0",
             "source": {
@@ -7862,6 +7872,7 @@
             "time": "2025-09-11T15:31:28+00:00"
         },
         {
+
             "name": "symfony/security-bundle",
             "version": "v7.3.4",
             "source": {
@@ -8411,6 +8422,7 @@
             "time": "2025-04-25T09:37:31+00:00"
         },
         {
+
             "name": "symfony/stimulus-bundle",
             "version": "v2.30.0",
             "source": {
@@ -8636,6 +8648,7 @@
             "time": "2025-09-11T14:36:48+00:00"
         },
         {
+
             "name": "symfony/translation",
             "version": "v7.3.4",
             "source": {
@@ -9473,6 +9486,7 @@
             "time": "2025-09-11T10:12:26+00:00"
         },
         {
+
             "name": "symfony/web-link",
             "version": "v7.3.0",
             "source": {
@@ -9719,6 +9733,7 @@
                 }
             ],
             "time": "2025-08-27T11:34:33+00:00"
+
         },
         {
             "name": "theseer/tokenizer",
