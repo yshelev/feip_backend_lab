@@ -18,7 +18,7 @@ class RequestController extends AbstractController
         if (empty($request->getContent())) {
             return new JsonResponse([
                 "comment" => "request body is empty"
-            ], 400); 
+            ], 422); 
         }
         $data = $request->toArray();         
         try {
@@ -27,7 +27,7 @@ class RequestController extends AbstractController
             return new JsonResponse([
                 "comment" => "bad data", 
                 "value" => null
-            ], 400); 
+            ], 422); 
         }         
         
         $response = $this->requestService->createEntity($requestDto); 
@@ -40,7 +40,7 @@ class RequestController extends AbstractController
         if (empty($request->getContent())) {
             return new JsonResponse([
                 "comment" => "request body is empty"
-            ], 400); 
+            ], 422); 
         }
         $data = $request->toArray();  
         try {
@@ -48,7 +48,7 @@ class RequestController extends AbstractController
         } catch (\Error $e) {
             return new JsonResponse([
                 "comment" => "bad data"
-            ], 400); 
+            ], 422); 
         }       
 
         $response = $this->requestService->replaceRequest($requestDto);
@@ -61,19 +61,17 @@ class RequestController extends AbstractController
         if (empty($request->getContent())) {
             return new JsonResponse([
                 "comment" => "request body is empty"
-            ], 400); 
+            ], 422); 
         }
 
         $data = $request->toArray(); 
-        try {
-            $comment = $data["comment"]; 
-            $id = $data["id"];
-        } catch (\Exception $e) {
-            $response = [
-                "comment" => "comment and id required in body", 
-            ]; 
-            return new JsonResponse($response, 400); 
-        }
+        if (empty($data["comment"]) || empty($data["id"])) {
+            return new JsonResponse([
+                "comment" => "id and json required in body", 
+            ], 422);
+        } 
+        $comment = $data["comment"]; 
+        $id = $data["id"];
         
         $this->requestService->changeRequestComment($id, $comment); 
 
