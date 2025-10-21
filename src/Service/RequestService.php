@@ -2,112 +2,64 @@
 
 namespace App\Service;
 
-use App\Repository\CsvRequestRepository;
-use App\Dto\RequestDto; 
+use App\Dto\CreateRequestDto;
+use App\Dto\UpdateRequestDto;
+use App\Entity\Request;
+use App\Repository\HouseRepository;
+use App\Repository\RequestRepository;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class RequestService {
 
     public function __construct(
-        private readonly CsvRequestRepository $requestRepository, 
-        private readonly SummerHouseService $summer_house_service
+        private readonly EntityManagerInterface $entityManager, 
+        private readonly RequestRepository $requestRepository, 
+        private readonly HouseRepository $houseRepository, 
+        private readonly UserRepository $userRepository, 
+        private readonly SummerHouseService $summerHouseService
     ) {}
 
-    public function create_entity($entity): array {
-        $response = [
-            "comment" => "OK", 
-            "status" => 201, 
-            "value" => null
-        ];
+    public function createEntity(CreateRequestDto $createRequestDto): object|null {
+        $house = $this->houseRepository->find($createRequestDto->houseId);
+        $user = $this->userRepository->findByPhoneNumber($createRequestDto->phoneNumber);
 
-        if (!$this->summer_house_service->isExistedWithId($entity->house_id)) {
-            $response["status"] = 404; 
-            $response["comment"] = "summer house with $entity->house_id not found"; 
-            return $response;
-        } 
+        $request = Request::create(
+            $createRequestDto->comment, 
+            $user,
+            $house
+        ); 
 
-        try {
-            $value = $this->requestRepository->create($entity); 
-        } catch (\Exception $e) {
-            $response["comment"] = "error while fetching csv"; 
-            $response["status"] = 500; 
-            return $response;
-        }; 
+        $this->entityManager->persist($request); 
+        $this->entityManager->flush(); 
 
-        $response["value"] = $value; 
-        return $response;
+        return $request;
     }
 
-    public function change_request_comment(int $id, string $comment): array {
-        $response = [
-            "status" => 202, 
-            "comment" => "Accepted"
-        ]; 
+    public function changeRequestComment(int $id, string $comment): object|null {
+        $request = $this->requestRepository->find($id);
+        $request->setComment($comment); 
+        $this->entityManager->flush(); 
         
-        try {
-            $request = $this->requestRepository->find($id);
-        } catch (\Exception $e) {
-            $response["status"] = 500; 
-            $response["comment"] = "error while fetching csv";
-            return $response; 
-        }; 
-
-        
-        if ($request === null) {
-            $response["status"] = 404;
-            $response["comment"] = "request with $id not found"; 
-            return $response; 
-        } 
-
-        $request->comment = $comment; 
-        
-        $response = $this->replace_request($request); 
-
-        return $response; 
+        return $request; 
     }
 
-    public function replace_request(RequestDto $entity): array {
-        $response = [
-            "status" => 202, 
-            "comment" => "Request replaced"
-        ];
-
-        if (!$this->summer_house_service->isExistedWithId($entity->house_id)) {
-            $response["status"] = 404; 
-            $response["comment"] = "summer house with $entity->house_id not found";
-            return $response;  
-        } 
+    public function replaceRequest(UpdateRequestDto $requestDto): object|null {
+        $request = $this->requestRepository->find($requestDto->id);
+        $house = $this->houseRepository->find($requestDto->houseId); 
+        $user = $this->userRepository->findByPhoneNumber($requestDto->phoneNumber); 
         
-        $id = $entity->id; 
+        $request->setComment($requestDto->comment);
+        $request->setUser($user); 
+        $request->setHouse($house); 
+        $this->entityManager->flush(); 
 
-        try {
-            $this->requestRepository->delete($id); 
-            $this->requestRepository->create($entity);
-        } catch (\Exception $e) {
-            $response["status"] = 500; 
-            $response["comment"] = "error while fetching csv"; 
-            return $response; 
-        } 
-        
-        return $response; 
+        return $request; 
     }
 
-    public function get_one_request_by_id(int $id): array {
-        $response = [
-            "comment" => "OK", 
-            "status" => 200, 
-            "value" => []
-        ];
-
-        try {
-            $value = $this->requestRepository->find($id);
-        } catch (\Exception $e) {
-            $response["status"] = 500; 
-            $response["comment"] = "error while fetching csv"; 
-            $response["value"] = null; 
-            return $response;  
-        }
-
-        $response["value"] = $value; 
-        return $response; 
+    public function getOneRequestById(int $id): object|null {
+        $request = $this->requestRepository->find($id);
+        
+        return $request; 
     }
 }
