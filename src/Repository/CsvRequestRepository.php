@@ -8,9 +8,9 @@ class CsvRequestRepository extends CsvAbstractRepository
     public function findAll(): array {
         $requests = []; 
 
-        $raw_data = $this->_get_csv_data(); 
+        $rawData = $this->getCsvData(); 
 
-        foreach($raw_data as $data) {
+        foreach($rawData as $data) {
             $requests[] = new RequestDto(
                 (int)$data[0], 
                 (int)$data[1], 
@@ -23,9 +23,9 @@ class CsvRequestRepository extends CsvAbstractRepository
     }
 
     public function find(int $id): ?RequestDto {
-        $raw_data = $this->_get_csv_data();
+        $rawData = $this->getCsvData();
 
-        foreach($raw_data as $data) {
+        foreach($rawData as $data) {
             if ($data[0] == $id) {
                 return new RequestDto(
                     (int)$data[0], 
@@ -40,10 +40,10 @@ class CsvRequestRepository extends CsvAbstractRepository
     }
 
     public function create($entity) {
-        $this->_add_raw_data_to_csv($entity->to_array());
+        $this->addRawDataToCsv($entity->toArray());
     }
 
     public function delete(int $id): bool {
-        return $this->_delete_row_by_id($id); 
+        return $this->deleteRowById($id); 
     }
 }

@@ -5,22 +5,22 @@ abstract class CsvAbstractRepository
 {
     public function __construct(protected string $filepath) {}
 
-    protected function _get_csv_data(): array {
-        $csv_data = []; 
+    protected function getCsvData(): array {
+        $csvData = []; 
         $handle = fopen($this->filepath, 'r', );
 
         while (($data = fgetcsv($handle, escape: '\\', separator: ';')) !== false) {
             if ($data !== null) {
-                $csv_data[] = $data; 
+                $csvData[] = $data; 
             }
         }
 
         fclose($handle); 
 
-        return $csv_data; 
+        return $csvData; 
     }
 
-    protected function _add_raw_data_to_csv(array $data): void {
+    protected function addRawDataToCsv(array $data): void {
         $handle = fopen($this->filepath, "a");
 
         fputcsv($handle, $data, ";"); 
@@ -29,17 +29,17 @@ abstract class CsvAbstractRepository
         return; 
     }
 
-    protected function _delete_row_by_id(int $id): bool {
-        $current_data = $this->_get_csv_data(); 
+    protected function deleteRowById(int $id): bool {
+        $currentData = $this->getCsvData(); 
 
         $flag = false; 
 
         $handle = fopen($this->filepath, "w"); 
 
-        foreach($current_data as $row_data) {
-            if ($row_data[0] != $id) {
+        foreach($currentData as $rowData) {
+            if ($rowData[0] != $id) {
                 $flag = true; 
-                fputcsv($handle, $row_data, ";"); 
+                fputcsv($handle, $rowData, ";"); 
             }
         }
 

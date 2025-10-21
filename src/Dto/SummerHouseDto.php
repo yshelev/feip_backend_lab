@@ -12,21 +12,21 @@ class SummerHouseDto
         public string $address,
         public int $price,
         public int $bedrooms,
-        public int $distance_to_sea,
-        public bool $has_shower,
-        public bool $has_bathroom,
+        public int $distanceToSea,
+        public bool $hasShower,
+        public bool $hasBathroom,
     ) {}
 
-    public function to_array(): array {
+    public function toArray(): array {
         return array(
             $this->id, 
             $this->area,
             $this->address,
             $this->price,
             $this->bedrooms,
-            $this->distance_to_sea,
-            $this->has_shower,
-            $this->has_bathroom,
+            $this->distanceToSea,
+            $this->hasShower,
+            $this->hasBathroom,
         );
     }
 }

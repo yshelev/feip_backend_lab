@@ -11,11 +11,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SummerHouseController extends AbstractController
 {
     public function __construct(
-        private readonly SummerHouseService $summer_house_service
+        private readonly SummerHouseService $summerHouseService
     ) {}
 
-    public function get_all(): Response
+    public function getAll(): Response
     {
-        return new JsonResponse($this->summer_house_service->findAll()); 
+        return new JsonResponse($this->summerHouseService->findAll()); 
     }
 }

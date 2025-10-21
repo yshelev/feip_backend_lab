@@ -6,20 +6,20 @@ controllers:
 
 app_get_all_summer_houses: 
   path: /house 
-  controller: App\Controller\SummerHouseController::get_all
+  controller: App\Controller\SummerHouseController::getAll
   methods: [GET]
   
 app_create_request: 
   path: /request
-  controller: App\Controller\RequestController::create_request 
+  controller: App\Controller\RequestController::createRequest 
   methods: [POST]
 
 app_fully_change_request: 
   path: /request
-  controller: App\Controller\RequestController::change_request
+  controller: App\Controller\RequestController::changeRequest
   methods: [PUT]
 
 app_change_request_commit: 
   path: /request
-  controller: App\Controller\RequestController::change_request_comment
+  controller: App\Controller\RequestController::changeRequestComment
   methods: [PATCH]

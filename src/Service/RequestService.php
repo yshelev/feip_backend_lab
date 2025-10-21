@@ -9,17 +9,17 @@ class RequestService {
 
     public function __construct(
         private readonly CsvRequestRepository $requestRepository, 
-        private readonly SummerHouseService $summer_house_service
+        private readonly SummerHouseService $summerHouseService
     ) {}
 
-    public function create_entity($entity): array {
+    public function createEntity($entity): array {
         $response = [
             "comment" => "OK", 
             "status" => 201, 
             "value" => null
         ];
 
-        if (!$this->summer_house_service->isExistedWithId($entity->house_id)) {
+        if (!$this->summerHouseService->isExistedWithId($entity->house_id)) {
             $response["status"] = 404; 
             $response["comment"] = "summer house with $entity->house_id not found"; 
             return $response;
@@ -37,7 +37,7 @@ class RequestService {
         return $response;
     }
 
-    public function change_request_comment(int $id, string $comment): array {
+    public function changeRequestComment(int $id, string $comment): array {
         $response = [
             "status" => 202, 
             "comment" => "Accepted"
@@ -60,20 +60,20 @@ class RequestService {
 
         $request->comment = $comment; 
         
-        $response = $this->replace_request($request); 
+        $response = $this->replaceRequest($request); 
 
         return $response; 
     }
 
-    public function replace_request(RequestDto $entity): array {
+    public function replaceRequest(RequestDto $entity): array {
         $response = [
             "status" => 202, 
             "comment" => "Request replaced"
         ];
 
-        if (!$this->summer_house_service->isExistedWithId($entity->house_id)) {
+        if (!$this->summerHouseService->isExistedWithId($entity->houseId)) {
             $response["status"] = 404; 
-            $response["comment"] = "summer house with $entity->house_id not found";
+            $response["comment"] = "summer house with $entity->houseId not found";
             return $response;  
         } 
         
@@ -91,7 +91,7 @@ class RequestService {
         return $response; 
     }
 
-    public function get_one_request_by_id(int $id): array {
+    public function getOneRequestById(int $id): array {
         $response = [
             "comment" => "OK", 
             "status" => 200, 

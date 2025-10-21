@@ -13,7 +13,7 @@ class RequestController extends AbstractController
         private readonly RequestService $requestService
     ) {}
 
-    public function create_request(Request $request): JsonResponse
+    public function createRequest(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return new JsonResponse([
@@ -30,12 +30,12 @@ class RequestController extends AbstractController
             ], 400); 
         }         
         
-        $response = $this->requestService->create_entity($requestDto); 
+        $response = $this->requestService->createEntity($requestDto); 
         
         return new JsonResponse($response["comment"], $response["status"]); 
     }
 
-    public function change_request(Request $request): JsonResponse
+    public function changeRequest(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return new JsonResponse([
@@ -51,12 +51,12 @@ class RequestController extends AbstractController
             ], 400); 
         }       
 
-        $response = $this->requestService->replace_request($requestDto);
+        $response = $this->requestService->replaceRequest($requestDto);
         
         return new JsonResponse($response["comment"], $response["status"]); 
     }
 
-    public function change_request_comment(Request $request): JsonResponse
+    public function changeRequestComment(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return new JsonResponse([
@@ -75,20 +75,20 @@ class RequestController extends AbstractController
             return new JsonResponse($response, 400); 
         }
         
-        $this->requestService->change_request_comment($id, $comment); 
+        $this->requestService->changeRequestComment($id, $comment); 
 
-        $response = $this->requestService->get_one_request_by_id($id);
+        $response = $this->requestService->getOneRequestById($id);
 
         $status = $response["status"]; 
-        $response_value = $response["value"];
-        if ($response_value !== null) {
-            $response_value = $response_value->to_array(); 
+        $responseValue = $response["value"];
+        if ($responseValue !== null) {
+            $responseValue = $responseValue->toArray(); 
         };
-        $response_comment = $response["comment"]; 
+        $responseComment = $response["comment"]; 
 
         return new JsonResponse([
-            "comment" => $response_comment, 
-            "value" => $response_value 
+            "comment" => $responseComment, 
+            "value" => $responseValue 
         ], $status); 
     }
 }

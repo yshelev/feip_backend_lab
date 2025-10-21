@@ -8,16 +8,16 @@ class RequestDto
 {
     public function __construct(
         public int $id,
-        public int $house_id ,
-        public string $phone_number,
+        public int $houseId ,
+        public string $phoneNumber,
         public string $comment,
     ) {}
     
-    public function to_array(): array {
+    public function toArray(): array {
         return array(
             $this->id, 
-            $this->house_id, 
-            $this->phone_number, 
+            $this->houseId, 
+            $this->phoneNumber, 
             $this->comment
         ); 
     }
