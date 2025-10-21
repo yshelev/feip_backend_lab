@@ -4,7 +4,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Dto\RequestDto; 
+use App\Dto\CreateRequestDto; 
+use App\Dto\UpdateRequestDto; 
 use App\Service\RequestService; 
 
 class RequestController extends AbstractController
@@ -13,82 +14,68 @@ class RequestController extends AbstractController
         private readonly RequestService $requestService
     ) {}
 
-    public function create_request(Request $request): JsonResponse
+    public function createRequest(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return new JsonResponse([
                 "comment" => "request body is empty"
-            ], 400); 
+            ], 422); 
         }
         $data = $request->toArray();         
         try {
-            $requestDto = new RequestDto(...$data); 
+            $requestDto = new CreateRequestDto(...$data); 
         } catch (\Error $e) {
             return new JsonResponse([
                 "comment" => "bad data", 
                 "value" => null
-            ], 400); 
+            ], 422); 
         }         
         
-        $response = $this->requestService->create_entity($requestDto); 
+        $this->requestService->createEntity($requestDto); 
         
-        return new JsonResponse($response["comment"], $response["status"]); 
+        return new JsonResponse(status: 201); 
     }
 
-    public function change_request(Request $request): JsonResponse
+    public function changeRequest(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return new JsonResponse([
                 "comment" => "request body is empty"
-            ], 400); 
+            ], 422); 
         }
         $data = $request->toArray();  
         try {
-            $requestDto = new RequestDto(...$data); 
+            $requestDto = new UpdateRequestDto(...$data); 
         } catch (\Error $e) {
             return new JsonResponse([
                 "comment" => "bad data"
-            ], 400); 
+            ], 422); 
         }       
 
-        $response = $this->requestService->replace_request($requestDto);
+        $response = $this->requestService->replaceRequest($requestDto);
         
         return new JsonResponse($response["comment"], $response["status"]); 
     }
 
-    public function change_request_comment(Request $request): JsonResponse
+    public function changeRequestComment(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
             return new JsonResponse([
                 "comment" => "request body is empty"
-            ], 400); 
+            ], 422); 
         }
 
         $data = $request->toArray(); 
-        try {
-            $comment = $data["comment"]; 
-            $id = $data["id"];
-        } catch (\Exception $e) {
-            $response = [
-                "comment" => "comment and id required in body", 
-            ]; 
-            return new JsonResponse($response, 400); 
-        }
+        if (empty($data["comment"]) || empty($data["id"])) {
+            return new JsonResponse([
+                "comment" => "id and json required in body", 
+            ], 422);
+        } 
+        $comment = $data["comment"]; 
+        $id = $data["id"];
         
-        $this->requestService->change_request_comment($id, $comment); 
+        $this->requestService->changeRequestComment($id, $comment); 
 
-        $response = $this->requestService->get_one_request_by_id($id);
-
-        $status = $response["status"]; 
-        $response_value = $response["value"];
-        if ($response_value !== null) {
-            $response_value = $response_value->to_array(); 
-        };
-        $response_comment = $response["comment"]; 
-
-        return new JsonResponse([
-            "comment" => $response_comment, 
-            "value" => $response_value 
-        ], $status); 
+        return new JsonResponse(status: 202); 
     }
 }
