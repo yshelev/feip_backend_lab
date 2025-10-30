@@ -4,7 +4,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Dto\RequestDto; 
+use App\Dto\CreateRequestDto; 
+use App\Dto\UpdateRequestDto; 
 use App\Service\RequestService; 
 
 class RequestController extends AbstractController
@@ -22,7 +23,7 @@ class RequestController extends AbstractController
         }
         $data = $request->toArray();         
         try {
-            $requestDto = new RequestDto(...$data); 
+            $requestDto = new CreateRequestDto(...$data); 
         } catch (\Error $e) {
             return new JsonResponse([
                 "comment" => "bad data", 
@@ -30,9 +31,9 @@ class RequestController extends AbstractController
             ], 422); 
         }         
         
-        $response = $this->requestService->createEntity($requestDto); 
+        $this->requestService->createEntity($requestDto); 
         
-        return new JsonResponse($response["comment"], $response["status"]); 
+        return new JsonResponse(status: 201); 
     }
 
     public function changeRequest(Request $request): JsonResponse
@@ -44,7 +45,7 @@ class RequestController extends AbstractController
         }
         $data = $request->toArray();  
         try {
-            $requestDto = new RequestDto(...$data); 
+            $requestDto = new UpdateRequestDto(...$data); 
         } catch (\Error $e) {
             return new JsonResponse([
                 "comment" => "bad data"
@@ -75,18 +76,6 @@ class RequestController extends AbstractController
         
         $this->requestService->changeRequestComment($id, $comment); 
 
-        $response = $this->requestService->getOneRequestById($id);
-
-        $status = $response["status"]; 
-        $responseValue = $response["value"];
-        if ($responseValue !== null) {
-            $responseValue = $responseValue->toArray(); 
-        };
-        $responseComment = $response["comment"]; 
-
-        return new JsonResponse([
-            "comment" => $responseComment, 
-            "value" => $responseValue 
-        ], $status); 
+        return new JsonResponse(status: 202); 
     }
 }
