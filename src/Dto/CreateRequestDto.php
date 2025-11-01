@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-class CreateRequestDto
+final class CreateRequestDto
 {
     public function __construct(
         public int $houseId,

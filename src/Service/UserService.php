@@ -10,7 +10,7 @@ use App\Repository\UserRepository;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UserService
+final class UserService
 {
     public function __construct(
         private EntityManagerInterface $entityManager,

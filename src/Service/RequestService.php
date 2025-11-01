@@ -12,7 +12,7 @@ use App\Repository\RequestRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class RequestService
+final class RequestService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -26,7 +26,14 @@ class RequestService
     public function createEntity(CreateRequestDto $createRequestDto): object|null
     {
         $house = $this->houseRepository->find($createRequestDto->houseId);
+        if ($house === null) {
+            return null; 
+        }
+
         $user = $this->userRepository->findByPhoneNumber($createRequestDto->phoneNumber);
+        if ($user === null) {
+            return null; 
+        }
 
         $request = Request::create(
             $createRequestDto->comment,
@@ -43,17 +50,32 @@ class RequestService
     public function changeRequestComment(int $id, string $comment): object|null
     {
         $request = $this->requestRepository->find($id);
+        if ($request === null) {
+            return null;
+        }
+
         $request->setComment($comment);
         $this->entityManager->flush();
 
         return $request;
     }
 
-    public function replaceRequest(UpdateRequestDto $requestDto): object|null
+    public function replaceRequest(UpdateRequestDto $requestDto): ?Request
     {
         $request = $this->requestRepository->find($requestDto->id);
+        if ($request === null) {
+            return null;  
+        }; 
+        
         $house = $this->houseRepository->find($requestDto->houseId);
+        if ($house === null) {
+            return null;
+        };
+
         $user = $this->userRepository->findByPhoneNumber($requestDto->phoneNumber);
+        if ($user === null) {
+            return null; 
+        };
 
         $request->setComment($requestDto->comment);
         $request->setUser($user);

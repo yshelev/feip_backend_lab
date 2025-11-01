@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+final class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -88,7 +88,7 @@ class User
         if ($this->requests->removeElement($request)) {
             // set the owning side to null (unless already changed)
             if ($request->getUser() === $this) {
-                $request->getUser(null);
+                $request->setUser(null);
             }
         }
 

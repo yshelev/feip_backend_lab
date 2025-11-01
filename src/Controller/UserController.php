@@ -35,8 +35,13 @@ final class UserController extends AbstractController
 
     public function createUser(Request $request): Response
     {
+        $rArray = $request->toArray(); 
+        if (empty($rArray['phoneNumber'])){
+            return new JsonResponse(['data' => 'missing key: phoneNumber'], 422); 
+        }
+
         $userDto = new CreateUserDto(
-            $request->toArray()["phoneNumber"]
+            $rArray["phoneNumber"] ?? ''
         );
 
         $response = $this->userService->createUser($userDto);
@@ -52,7 +57,7 @@ final class UserController extends AbstractController
         ], 201);
     }
 
-    public function getAllUsers(Request $request): Response
+    public function getAllUsers(): Response
     {
         $response = $this->userService->getAllUsers();
 

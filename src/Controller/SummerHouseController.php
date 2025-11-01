@@ -27,20 +27,27 @@ final class SummerHouseController extends AbstractController
     {
         $rArray = $request->toArray();
 
+        $keys = [
+            'area', 'address', 'price', 'bedrooms', 'distanceToSea', 'hasShower', 'hasBathroom'
+        ];
+
+        foreach ($keys as $key) {
+            if (empty($rArray[$key])) {
+                return new JsonResponse(['data' => "missing key: $key"], 422); 
+            }
+        }
+
         $houseDto = new CreateSummerHouseDto(
-            area: $rArray['area'],
-            address: $rArray['address'],
-            price: $rArray['price'],
-            bedrooms: $rArray['bedrooms'],
-            distanceToSea: $rArray['distanceToSea'],
-            hasShower: $rArray['hasShower'],
-            hasBathroom: $rArray['hasBathroom']
+            area: $rArray['area'] ?? 0,
+            address: $rArray['address'] ?? "",
+            price: $rArray['price'] ?? 0,
+            bedrooms: $rArray['bedrooms'] ?? 0,
+            distanceToSea: $rArray['distanceToSea'] ?? 0,
+            hasShower: $rArray['hasShower'] ?? false,
+            hasBathroom: $rArray['hasBathroom'] ?? true
         );
 
-        $response = $this->summerHouseService->create($houseDto);
-        if ($response === null) {
-            return new JsonResponse(status: 404);
-        }
+        $this->summerHouseService->create($houseDto);
 
         return new JsonResponse(status: 201);
     }

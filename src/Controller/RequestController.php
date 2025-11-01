@@ -11,7 +11,7 @@ use App\Dto\CreateRequestDto;
 use App\Dto\UpdateRequestDto;
 use App\Service\RequestService;
 
-class RequestController extends AbstractController
+final class RequestController extends AbstractController
 {
     public function __construct(
         private readonly RequestService $requestService
@@ -34,7 +34,10 @@ class RequestController extends AbstractController
                 "value" => null
             ], 422);
         }
-        $this->requestService->createEntity($requestDto);
+        $response = $this->requestService->createEntity($requestDto);
+        if ($response === null) {
+            return new JsonResponse(status: 404); 
+        }
 
         return new JsonResponse(status: 201);
     }
@@ -56,8 +59,11 @@ class RequestController extends AbstractController
         }
 
         $response = $this->requestService->replaceRequest($requestDto);
+        if ($response === null){ 
+            return new JsonResponse(status: 404); 
+        }
 
-        return new JsonResponse($response["comment"], $response["status"]);
+        return new JsonResponse(status: 202);
     }
 
     public function changeRequestComment(Request $request): JsonResponse
@@ -77,7 +83,10 @@ class RequestController extends AbstractController
         $comment = $data["comment"];
         $id = $data["id"];
 
-        $this->requestService->changeRequestComment($id, $comment);
+        $response = $this->requestService->changeRequestComment($id, $comment);
+        if ($response === null) {
+            return new JsonResponse(status: 404);
+        }
 
         return new JsonResponse(status: 202);
     }

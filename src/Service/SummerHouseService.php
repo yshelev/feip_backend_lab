@@ -9,7 +9,7 @@ use App\Dto\CreateSummerHouseDto;
 use App\Entity\House;
 use Doctrine\ORM\EntityManagerInterface;
 
-class SummerHouseService
+final class SummerHouseService
 {
     public function __construct(
         private HouseRepository $summerHouseRepository,

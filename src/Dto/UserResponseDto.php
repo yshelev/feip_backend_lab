@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-class UserResponseDto
+final class UserResponseDto
 {
     public function __construct(
         public readonly string $phoneNumber,
