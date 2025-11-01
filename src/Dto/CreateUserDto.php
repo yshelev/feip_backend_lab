@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Dto; 
+declare(strict_types=1);
 
-class CreateUserDto
+namespace App\Dto;
+
+final class CreateUserDto
 {
     public function __construct(
         public string $phoneNumber
-    ){}
-}   
+    ) {
+    }
+}

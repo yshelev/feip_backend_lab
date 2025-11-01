@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Dto; 
+declare(strict_types=1);
 
-class UserResponseDto 
+namespace App\Dto;
+
+final class UserResponseDto
 {
     public function __construct(
-        public readonly string $phoneNumber, 
-    ) {}
+        public readonly string $phoneNumber,
+    ) {
+    }
 }

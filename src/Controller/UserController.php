@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\CreateUserDto;
@@ -13,45 +15,52 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UserController extends AbstractController
 {
     public function __construct(
-        private UserService $userService 
-    ) {}
+        private UserService $userService
+    ) {
+    }
 
     public function getOneUser(int $id): Response
     {
         $user = $this->userService->getUserById($id);
         if ($user === null) {
             return new JsonResponse([
-                "phoneNumber" => null, 
-            ], 404); 
+                "phoneNumber" => null,
+            ], 404);
         }
-        
+
         return new JsonResponse([
             "phoneNumber" => $user->phoneNumber,
-        ], 200); 
-    }   
+        ], 200);
+    }
 
     public function createUser(Request $request): Response
     {
-        $userDto = new CreateUserDto(
-            $request->toArray()["phoneNumber"]
-        ); 
+        $rArray = $request->toArray(); 
+        if (empty($rArray['phoneNumber'])){
+            return new JsonResponse(['data' => 'missing key: phoneNumber'], 422); 
+        }
 
-        $response = $this->userService->createUser($userDto); 
+        $userDto = new CreateUserDto(
+            $rArray["phoneNumber"] ?? ''
+        );
+
+        $response = $this->userService->createUser($userDto);
         if ($response["status"] === 0) {
             $value = $response["value"];
             return new JsonResponse([
-                "id" => $value->getId(), 
+                "id" => $value->getId(),
                 'pn' => $value->getPhoneNumber()
             ], 400);
         }
         return new JsonResponse([
             "message" => "successfully created"
-        ], 201); 
+        ], 201);
     }
 
-    public function getAllUsers(Request $request): Response {
-        $response = $this->userService->getAllUsers(); 
+    public function getAllUsers(): Response
+    {
+        $response = $this->userService->getAllUsers();
 
-        return new JsonResponse($response, 200); 
+        return new JsonResponse($response, 200);
     }
 }

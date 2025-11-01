@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-class CreateSummerHouseDto
+final class CreateSummerHouseDto
 {
     public function __construct(
         public float $area,
@@ -14,5 +14,6 @@ class CreateSummerHouseDto
         public int $distanceToSea,
         public bool $hasShower,
         public bool $hasBathroom,
-    ) {}
+    ) {
+    }
 }

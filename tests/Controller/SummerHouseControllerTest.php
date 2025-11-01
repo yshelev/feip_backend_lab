@@ -16,7 +16,7 @@ class SummerHouseControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->summerHouseServiceMock = $this->createMock(SummerHouseService::class);
-        
+
         // Replace the service in container with our mock
         $container = static::getContainer();
         $container->set(SummerHouseService::class, $this->summerHouseServiceMock);
@@ -88,7 +88,7 @@ class SummerHouseControllerTest extends WebTestCase
         $this->summerHouseServiceMock
             ->expects($this->once())
             ->method('create')
-            ->willReturn(['id' => 1]); 
+            ->willReturn(['id' => 1]);
 
         $this->client->request(
             'POST',
@@ -114,7 +114,7 @@ class SummerHouseControllerTest extends WebTestCase
     {
         $this->summerHouseServiceMock
             ->expects($this->once())
-            ->method('create'); 
+            ->method('create');
 
         $this->client->request(
             'POST',

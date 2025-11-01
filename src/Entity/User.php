@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -9,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+final class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -33,10 +35,10 @@ class User
     public static function create(
         string $phoneNumber
     ) {
-        $user = new self(); 
-        $user->phoneNumber = $phoneNumber; 
+        $user = new self();
+        $user->phoneNumber = $phoneNumber;
 
-        return $user; 
+        return $user;
     }
 
     public function getId(): ?int
@@ -86,7 +88,7 @@ class User
         if ($this->requests->removeElement($request)) {
             // set the owning side to null (unless already changed)
             if ($request->getUser() === $this) {
-                $request->getUser(null);
+                $request->setUser(null);
             }
         }
 

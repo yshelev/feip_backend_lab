@@ -26,7 +26,7 @@ final class UserControllerTest extends WebTestCase
         $user = new UserResponseDto(
             '+1234567890'
         );
-        
+
 
         $this->userServiceMock
             ->method('getUserById')
@@ -84,7 +84,7 @@ final class UserControllerTest extends WebTestCase
     {
         $user = new User();
         $user->setId(1);
-        $user->setPhoneNumber('+1234567890'); 
+        $user->setPhoneNumber('+1234567890');
 
         $this->userServiceMock
             ->method('createUser')
@@ -104,7 +104,7 @@ final class UserControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         $responseContent = json_decode($this->client->getResponse()->getContent(), true);
-        
+
         $this->assertEquals(1, $responseContent['id']);
         $this->assertEquals('+1234567890', $responseContent['pn']);
     }
