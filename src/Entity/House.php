@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\HouseRepository;
@@ -35,24 +37,24 @@ class House
     private ?bool $hasBathroom = null;
 
     public static function create(
-        float $area, 
-        string $address, 
-        int $price, 
-        int $bedrooms, 
-        int $distanceToSea, 
-        bool $hasShower, 
+        float $area,
+        string $address,
+        int $price,
+        int $bedrooms,
+        int $distanceToSea,
+        bool $hasShower,
         bool $hasBathroom
     ) {
-        $house = new self(); 
-        $house->area = $area; 
-        $house->address = $address; 
-        $house->price = $price; 
-        $house->bedrooms = $bedrooms; 
-        $house->distanceToSea = $distanceToSea; 
-        $house->hasShower = $hasShower; 
-        $house->hasBathroom = $hasBathroom; 
+        $house = new self();
+        $house->area = $area;
+        $house->address = $address;
+        $house->price = $price;
+        $house->bedrooms = $bedrooms;
+        $house->distanceToSea = $distanceToSea;
+        $house->hasShower = $hasShower;
+        $house->hasBathroom = $hasBathroom;
 
-        return $house; 
+        return $house;
     }
 
     public function getId(): ?int

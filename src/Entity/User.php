@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -33,10 +35,10 @@ class User
     public static function create(
         string $phoneNumber
     ) {
-        $user = new self(); 
-        $user->phoneNumber = $phoneNumber; 
+        $user = new self();
+        $user->phoneNumber = $phoneNumber;
 
-        return $user; 
+        return $user;
     }
 
     public function getId(): ?int

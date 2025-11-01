@@ -14,5 +14,6 @@ class CreateSummerHouseDto
         public int $distanceToSea,
         public bool $hasShower,
         public bool $hasBathroom,
-    ) {}
+    ) {
+    }
 }

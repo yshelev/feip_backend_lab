@@ -10,5 +10,6 @@ class CreateRequestDto
         public int $houseId,
         public string $phoneNumber,
         public string $comment,
-    ) {}
+    ) {
+    }
 }

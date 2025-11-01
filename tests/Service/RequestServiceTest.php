@@ -65,7 +65,7 @@ class RequestServiceTest extends TestCase
             ->willReturn($user);
 
         $requestMock = $this->createMock(Request::class);
-        
+
         $this->entityManagerMock
             ->expects($this->once())
             ->method('persist')

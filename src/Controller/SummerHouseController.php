@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Dto\CreateSummerHouseDto;
@@ -13,42 +15,44 @@ final class SummerHouseController extends AbstractController
 {
     public function __construct(
         private readonly SummerHouseService $summerHouseService
-    ) {}
+    ) {
+    }
 
     public function getAll(): Response
     {
-        return new JsonResponse($this->summerHouseService->findAll()); 
+        return new JsonResponse($this->summerHouseService->findAll());
     }
 
     public function create(Request $request): Response
     {
-        $rArray = $request->toArray(); 
+        $rArray = $request->toArray();
 
         $houseDto = new CreateSummerHouseDto(
             area: $rArray['area'],
             address: $rArray['address'],
-            price: $rArray['price'], 
+            price: $rArray['price'],
             bedrooms: $rArray['bedrooms'],
-            distanceToSea: $rArray['distanceToSea'], 
+            distanceToSea: $rArray['distanceToSea'],
             hasShower: $rArray['hasShower'],
             hasBathroom: $rArray['hasBathroom']
-        ); 
+        );
 
-        $response = $this->summerHouseService->create($houseDto); 
+        $response = $this->summerHouseService->create($houseDto);
         if ($response === null) {
-            return new JsonResponse(status: 404); 
+            return new JsonResponse(status: 404);
         }
 
-        return new JsonResponse(status: 201); 
+        return new JsonResponse(status: 201);
     }
 
-    public function getById(int $id): Response {
+    public function getById(int $id): Response
+    {
         $response = $this->summerHouseService->find($id);
 
         if ($response === null) {
-            return new JsonResponse(status: 404); 
+            return new JsonResponse(status: 404);
         }
 
-        return new JsonResponse($response); 
-    } 
+        return new JsonResponse($response);
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -19,22 +21,22 @@ class UserRepository extends ServiceEntityRepository
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
-   public function findByPhoneNumber($phoneNumber): ?User
-   {    
+    public function findByPhoneNumber($phoneNumber): ?User
+    {
          return $this->createQueryBuilder('u')
-           ->andWhere('u.phoneNumber = :val')
-           ->setParameter('val', $phoneNumber)
-           ->getQuery()
-           ->getOneOrNullResult();
-   }
+             ->andWhere('u.phoneNumber = :val')
+             ->setParameter('val', $phoneNumber)
+             ->getQuery()
+             ->getOneOrNullResult();
+    }
 
-   public function findById($id): ?User
-   {
-       return $this->createQueryBuilder('u')
-           ->andWhere('u.id = :val')
-           ->setParameter('val', $id)
-           ->getQuery()
-           ->getOneOrNullResult()
-       ;
-   }
+    public function findById($id): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

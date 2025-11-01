@@ -17,7 +17,7 @@ class RequestControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
         $this->requestServiceMock = $this->createMock(RequestService::class);
-        
+
         $container = static::getContainer();
         $container->set(RequestService::class, $this->requestServiceMock);
     }
@@ -25,10 +25,10 @@ class RequestControllerTest extends WebTestCase
     public function testCreateRequestSuccess(): void
     {
         $requestData = new CreateRequestDto(
-            comment: "omment", 
-            phoneNumber: "+79999999999", 
+            comment: "omment",
+            phoneNumber: "+79999999999",
             houseId: 1
-        ); 
+        );
 
         $this->requestServiceMock
             ->expects($this->once())
@@ -94,7 +94,7 @@ class RequestControllerTest extends WebTestCase
             'id' => 1,
             'comment' => 'updated_value'
         ];
-        
+
         $this->client->request(
             'PATCH',
             '/request',

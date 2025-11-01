@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\RequestRepository;
@@ -38,16 +40,15 @@ class Request
 
     public static function create(
         ?string $comment,
-        User $user, 
+        User $user,
         House $house
-    ) 
-    {
-        $request = new self(); 
-        $request->user = $user; 
-        $request->house = $house; 
-        $request->comment = $comment; 
+    ) {
+        $request = new self();
+        $request->user = $user;
+        $request->house = $house;
+        $request->comment = $comment;
 
-        return $request; 
+        return $request;
     }
 
     public function getComment(): ?string
