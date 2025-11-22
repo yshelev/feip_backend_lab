@@ -5,6 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Dto\RequestDto; 
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Service\RequestService; 
 
 class RequestController extends AbstractController
@@ -16,21 +17,24 @@ class RequestController extends AbstractController
     public function createRequest(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
-            return new JsonResponse([
-                "comment" => "request body is empty"
-            ], 422); 
+            throw new HttpException(422, "request body is empty"); 
         }
         $data = $request->toArray();         
         try {
             $requestDto = new RequestDto(...$data); 
         } catch (\Error $e) {
-            return new JsonResponse([
-                "comment" => "bad data", 
-                "value" => null
-            ], 422); 
+            throw new HttpException(422, "bad request data"); 
         }         
-        
-        $response = $this->requestService->createEntity($requestDto); 
+        try {
+            $response = $this->requestService->createEntity($requestDto); 
+        }
+        catch (\Exception $e) {
+            throw new HttpException(
+                $e->getCode(), 
+                $e->getMessage(), 
+            ); 
+        }
+
         
         return new JsonResponse($response["comment"], $response["status"]); 
     }
@@ -38,17 +42,19 @@ class RequestController extends AbstractController
     public function changeRequest(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
-            return new JsonResponse([
-                "comment" => "request body is empty"
-            ], 422); 
+            throw new HttpException(
+                422, 
+                "request body is empty"
+            );
         }
         $data = $request->toArray();  
         try {
             $requestDto = new RequestDto(...$data); 
         } catch (\Error $e) {
-            return new JsonResponse([
-                "comment" => "bad data"
-            ], 422); 
+            throw new HttpException(
+                422, 
+                "bad data"
+            );
         }       
 
         $response = $this->requestService->replaceRequest($requestDto);
@@ -59,29 +65,43 @@ class RequestController extends AbstractController
     public function changeRequestComment(Request $request): JsonResponse
     {
         if (empty($request->getContent())) {
-            return new JsonResponse([
-                "comment" => "request body is empty"
-            ], 422); 
+            throw new HttpException(
+                422, 
+                "request body is empty"
+            );
         }
 
         $data = $request->toArray(); 
         if (empty($data["comment"]) || empty($data["id"])) {
-            return new JsonResponse([
-                "comment" => "id and json required in body", 
-            ], 422);
+            throw new HttpException(
+                422, 
+                "id and json required in body"
+            );
         } 
         $comment = $data["comment"]; 
         $id = $data["id"];
         
-        $this->requestService->changeRequestComment($id, $comment); 
+        try {
+            $this->requestService->changeRequestComment($id, $comment);     
+        }
+        catch (\Exception $e) {
+            throw new HttpException(
+                $e->getCode(),
+                $e->getMessage()
+            );
+        }
 
-        $response = $this->requestService->getOneRequestById($id);
-
+        try {
+            $response = $this->requestService->getOneRequestById($id);
+        }
+        catch (\Exception $e) {
+            throw new HttpException(
+                $e->getCode(),
+                $e->getMessage() 
+            ); 
+        }
         $status = $response["status"]; 
         $responseValue = $response["value"];
-        if ($responseValue !== null) {
-            $responseValue = $responseValue->toArray(); 
-        };
         $responseComment = $response["comment"]; 
 
         return new JsonResponse([

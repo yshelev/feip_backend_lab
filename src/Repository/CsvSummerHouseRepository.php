@@ -11,16 +11,25 @@ class CsvSummerHouseRepository extends CsvAbstractRepository
 
         $rawData = $this->getCsvData(); 
 
+
         foreach($rawData as $data) {
+            $id = (int)$data[0]; 
+            $area = (int)$data[1]; 
+            $address = (int)$data[2]; 
+            $price = (int)$data[3]; 
+            $bedrooms = (int)$data[4]; 
+            $distanceToSea = (int)$data[5]; 
+            $hasShower = (int)$data[6]; 
+            $hasBathroom = (int)$data[7];
             $requests[] = new SummerHouseDto(
-                (int)$data[0], 
-                (float)$data[1], 
-                $data[2], 
-                (int)$data[3], 
-                (int)$data[4], 
-                (int)$data[5], 
-                (bool)$data[6], 
-                (bool)$data[7]
+                id: $id, 
+                area: $area, 
+                address: $address, 
+                price: $price, 
+                bedrooms: $bedrooms, 
+                distanceToSea: $distanceToSea, 
+                hasShower: $hasShower, 
+                hasBathroom: $hasBathroom
             ); 
         };
 
@@ -30,22 +39,32 @@ class CsvSummerHouseRepository extends CsvAbstractRepository
     public function find(int $id): ?SummerHouseDto {
         $rawData = $this->getCsvData();
 
+        $summerHouseDto = null; 
+
         foreach($rawData as $data) {
             if ($data[0] == $id) {
-                return new SummerHouseDto(
-                    (int)$data[0], 
-                    (float)$data[1], 
-                    $data[2], 
-                    (int)$data[3], 
-                    (int)$data[4], 
-                    (int)$data[5], 
-                    (bool)$data[6], 
-                    (bool)$data[7]
+                $area = (int)$data[1]; 
+                $address = (int)$data[2]; 
+                $price = (int)$data[3]; 
+                $bedrooms = (int)$data[4]; 
+                $distanceToSea = (int)$data[5]; 
+                $hasShower = (int)$data[6]; 
+                $hasBathroom = (int)$data[7]; 
+                $summerHouseDto = new SummerHouseDto(
+                    id: $id, 
+                    area: $area, 
+                    address: $address, 
+                    price: $price, 
+                    bedrooms: $bedrooms, 
+                    distanceToSea: $distanceToSea, 
+                    hasShower: $hasShower, 
+                    hasBathroom: $hasBathroom
                 ); 
+                break; 
             }
         }
 
-        return null;
+        return $summerHouseDto;
     }
 
     public function create($entity) {

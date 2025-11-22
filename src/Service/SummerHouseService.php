@@ -28,14 +28,10 @@ class SummerHouseService {
             $house = $this->summerHouseRepository->find($id);
             $response["value"] = $house; 
         } catch (\Exception $e) {
-            $response["value"] = null; 
-            $response["comment"] = "error while fetching csv"; 
-            $response["status"] = 500; 
-            return $response; 
+            throw new \Exception("error while fetching csv", 500); 
         }; 
         if ($response["value"] === null) {
-            $response["comment"] = "not found summer house with id: $id"; 
-            $response["status"] = 404; 
+            throw new \Exception("not found summer house with id: $id", 404);
         }
 
         return $response; 

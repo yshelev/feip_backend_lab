@@ -20,17 +20,13 @@ class RequestService {
         ];
 
         if (!$this->summerHouseService->isExistedWithId($entity->house_id)) {
-            $response["status"] = 404; 
-            $response["comment"] = "summer house with $entity->house_id not found"; 
-            return $response;
+            throw new \Exception("summer house with $entity->house_id not found", 404);
         } 
 
         try {
             $value = $this->requestRepository->create($entity); 
         } catch (\Exception $e) {
-            $response["comment"] = "error while fetching csv"; 
-            $response["status"] = 500; 
-            return $response;
+            throw new \Exception("error while fetching csv", 500);
         }; 
 
         $response["value"] = $value; 
@@ -46,21 +42,24 @@ class RequestService {
         try {
             $request = $this->requestRepository->find($id);
         } catch (\Exception $e) {
-            $response["status"] = 500; 
-            $response["comment"] = "error while fetching csv";
-            return $response; 
+            throw new \Exception("error while fetching csv", 500); 
         }; 
 
         
         if ($request === null) {
-            $response["status"] = 404;
-            $response["comment"] = "request with $id not found"; 
-            return $response; 
+            throw new \Exception("request with $id not found", 404); 
         } 
 
         $request->comment = $comment; 
-        
-        $response = $this->replaceRequest($request); 
+        try {
+            $response = $this->replaceRequest($request); 
+        }
+        catch (\Exception $e) {
+            throw new \Exception(
+                $e->getMessage(), 
+                $e->getCode()
+            ); 
+        }; 
 
         return $response; 
     }
@@ -72,9 +71,7 @@ class RequestService {
         ];
 
         if (!$this->summerHouseService->isExistedWithId($entity->houseId)) {
-            $response["status"] = 404; 
-            $response["comment"] = "summer house with $entity->houseId not found";
-            return $response;  
+            throw new \Exception("summer house with $entity->houseId not found", 404); 
         } 
         
         $id = $entity->id; 
@@ -83,9 +80,10 @@ class RequestService {
             $this->requestRepository->delete($id); 
             $this->requestRepository->create($entity);
         } catch (\Exception $e) {
-            $response["status"] = 500; 
-            $response["comment"] = "error while fetching csv"; 
-            return $response; 
+            throw new \Exception(
+                "error while fetching csv", 
+                500
+            ); 
         } 
         
         return $response; 
@@ -101,10 +99,11 @@ class RequestService {
         try {
             $value = $this->requestRepository->find($id);
         } catch (\Exception $e) {
-            $response["status"] = 500; 
-            $response["comment"] = "error while fetching csv"; 
-            $response["value"] = null; 
-            return $response;  
+            throw new \Exception("error while fetching csv", 500); 
+        }
+
+        if ($value === null) {
+            throw new \Exception("not found request wth id $id", 404);
         }
 
         $response["value"] = $value; 

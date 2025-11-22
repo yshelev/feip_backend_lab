@@ -11,11 +11,15 @@ class CsvRequestRepository extends CsvAbstractRepository
         $rawData = $this->getCsvData(); 
 
         foreach($rawData as $data) {
+            $id = (int)$data[0]; 
+            $houseId = (int)$data[1]; 
+            $phoneNumber = $data[2]; 
+            $comment = $data[3];
             $requests[] = new RequestDto(
-                (int)$data[0], 
-                (int)$data[1], 
-                $data[2], 
-                $data[3]
+                id: $id, 
+                houseId: $houseId, 
+                phoneNumber: $phoneNumber, 
+                comment: $comment
             ); 
         };
 
@@ -25,18 +29,24 @@ class CsvRequestRepository extends CsvAbstractRepository
     public function find(int $id): ?RequestDto {
         $rawData = $this->getCsvData();
 
+        $requestDto = null; 
+
         foreach($rawData as $data) {
             if ($data[0] == $id) {
-                return new RequestDto(
-                    (int)$data[0], 
-                    (int)$data[1], 
-                    $data[2], 
-                    $data[3]
+                $houseId = (int)$data[1]; 
+                $phoneNumber = $data[2]; 
+                $comment = $data[3];
+                $requestDto = new RequestDto(
+                    id: $id, 
+                    houseId: $houseId, 
+                    phoneNumber: $phoneNumber, 
+                    comment: $comment
                 ); 
+                break;
             }
         }
 
-        return null;
+        return $requestDto;
     }
 
     public function create($entity) {
